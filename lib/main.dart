@@ -1,14 +1,6 @@
-// Copyright 2017 The Chromium Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
-
-// ignore_for_file: public_member_api_docs
-
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:sensors_plus/sensors_plus.dart';
-
-// import 'snake.dart';
 
 void main() {
   runApp(const MyApp());
@@ -39,33 +31,39 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  static const int _snakeRows = 20;
-  static const int _snakeColumns = 20;
-  static const double _snakeCellSize = 10.0;
-
-  List<double>? _gyroscopeValues;
+  List<double>? _accelerometerValues;
 
   final _streamSubscriptions = <StreamSubscription<dynamic>>[];
 
   @override
   Widget build(BuildContext context) {
-    final gyroscope =
-        _gyroscopeValues?.map((double v) => v.toStringAsFixed(1)).toList();
+    final accelerometer =
+        _accelerometerValues?.map((double v) => v.toStringAsFixed(1)).toList();
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Gyroscope Sensor'),
+        title: const Text('Sensor Example'),
       ),
-      body: Container(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Text('Gyroscope: $gyroscope'),
-            ],
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          Center(
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                border: Border.all(width: 1.0, color: Colors.black38),
+              ),
+            ),
           ),
-        ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text('Accelerometer: $accelerometer'),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -82,10 +80,10 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     _streamSubscriptions.add(
-      gyroscopeEvents.listen(
-        (GyroscopeEvent event) {
+      accelerometerEvents.listen(
+        (AccelerometerEvent event) {
           setState(() {
-            _gyroscopeValues = <double>[event.x, event.y, event.z];
+            _accelerometerValues = <double>[event.x, event.y, event.z];
           });
         },
       ),
